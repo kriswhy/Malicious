@@ -140,17 +140,16 @@ def sponge(N, d, r, b=1600, nr=24):
         if d <= len(Z):
             return Z[:d]
         else:
-            # print(S)
             S = [int(a) for a in S]
-            # print(S)
             S = keccak_p(S, nr, b//25)
        
 def keccak_c(N, d, r):
     return sponge(N, d, r)
 
 def shake128(M, d):
-    M += [1]*4
-    s =  keccak_c(M, d, 1600-256)
+    m = [x for x in M]
+    m += [1]*4
+    s =  keccak_c(m, d, 1600-256)
     hash_val = ""
     for i in range(0, len(s), 8):
         byte = s[i:i+8]
@@ -166,18 +165,3 @@ def bits_from_string(s):
         bits = '00000000'[len(bits):] + bits
         result.extend([int(b) for b in bits[::-1]])
     return result
-
-import numpy as np
-
-def main():
-
-    tweak1 = list(np.random.randint(0,2,size=128))
-    # tweak2 = list(np.random.randint(0,2,size=128))
-    # tweaks = [tweak1,tweak2]
-
-    subtweaks1 = shake128(tweak1, 50)
-    # subtweaks2 = shake128(tweak2, 256)
-    print(subtweaks1)
-    # print(subtweaks2)
-if __name__ == "__main__":
-    main()
